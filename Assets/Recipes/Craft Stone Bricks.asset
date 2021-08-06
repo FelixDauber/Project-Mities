@@ -1,21 +1,3 @@
-%YAML 1.1
-%TAG !u! tag:unity3d.com,2011:
---- !u!114 &11400000
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67562d94adb2c4b42b6f6739af121700, type: 3}
-  m_Name: Craft Stone Bricks
-  m_EditorClassIdentifier: 
-  effortRequired: 8
-  required:
-  - type: {fileID: 11400000, guid: f88e08998a8d1aa468f30617a69869d9, type: 2}
-    amount: 6
-  produced:
-    type: {fileID: 11400000, guid: f88e08998a8d1aa468f30617a69869d9, type: 2}
-    amount: 3
+version https://git-lfs.github.com/spec/v1
+oid sha256:18fb38345cd56e53cd52bf414a3030bea45f59245f754c9515f499a8ea95ffaa
+size 635
