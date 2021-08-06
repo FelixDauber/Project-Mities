@@ -66,6 +66,7 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    m_Ints: []
     m_Floats:
     - _AddPrecomputedVelocity: 0
     - _AlphaCutoffEnable: 0
@@ -106,7 +107,7 @@ Material:
     - _NormalTile: 512
     - _OpaqueCullMode: 2
     - _PW_DstBlend: 0
-    - _PW_MainLightIntensity: 2.4
+    - _PW_MainLightIntensity: 1
     - _PW_SSS: 1
     - _PW_SSSDistortion: 0.34
     - _PW_SSSPower: 1
@@ -154,12 +155,12 @@ Material:
     - _ZTestTransparent: 4
     - _ZWrite: 1
     m_Colors:
-    - _AmbientColor: {r: 0.7027151, g: 0.88101596, b: 1.0016313, a: 1}
+    - _AmbientColor: {r: 0.635, g: 0.696, b: 0.735, a: 0}
     - _DoubleSidedConstants: {r: -1, g: -1, b: -1, a: 0}
     - _EdgeWaterColor: {r: 0, g: 0, b: 0, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
-    - _PW_MainLightColor: {r: 0.9843138, g: 0.9058824, b: 0.8117648, a: 1}
-    - _PW_MainLightDir: {r: -0.00000021473141, g: 0.9396927, b: 0.34202003, a: 0}
+    - _PW_MainLightColor: {r: 1, g: 1, b: 1, a: 1}
+    - _PW_MainLightDir: {r: 0.32139382, g: 0.76604456, b: -0.5566703, a: 0}
     - _PW_MainLightSpecular: {r: 0.3137255, g: 0.27189302, b: 0.22345544, a: 1}
     - _PW_SSSTint: {r: 1, g: 1, b: 1, a: 1}
     - _ReflectionColor: {r: 0.1, g: 0.12, b: 0.17, a: 1}

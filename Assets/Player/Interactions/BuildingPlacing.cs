@@ -33,15 +33,20 @@ public class BuildingPlacing : MonoBehaviour
 
     public void SpawnBuilding(GameObject newBuilding)
     {
-        if (currentBuilding != null) Destroy(currentBuilding);
+        if (currentBuilding != null) 
+        {
+            Debug.Log(currentBuilding.gameObject);
+            Destroy(currentBuilding.gameObject);
+        }
         Building instantiatedBuilding = Instantiate(newBuilding).GetComponent<Building>();
         instantiatedBuilding.transform.position = Vector3.down * 50000;
-        GrabBuilding(instantiatedBuilding);
+        instantiatedBuilding.gameObject.name = instantiatedBuilding.gameObject.name.Replace("(Clone)", "");
+        GrabBuilding(instantiatedBuilding, true);
     }
 
-    public void GrabBuilding(Building building)
+    public void GrabBuilding(Building building, bool forced = false)
     {
-        if (currentBuilding != null) return;
+        if (!forced && currentBuilding != null) return;
         currentBuilding = building;
         currentBuilding.SetPhysical(false);
         PlayerVariables.current.playerState = Playerstate.placingBuilding;
@@ -65,7 +70,8 @@ public class BuildingPlacing : MonoBehaviour
     {
         if(currentBuilding != null)
         {
-            Destroy(currentBuilding);
+            Destroy(currentBuilding.gameObject);
+            enabled = false;
         }
     }
 

@@ -8,9 +8,11 @@ public class CameraController : MonoBehaviour
     [Header("Movement")]
 
     public Vector3 focusPoint;
+    float wantedFocusPointHeight;
     public float baseMovementSpeed = 15;
     public float movementSpeed;
     public float extraSpeedPerDistance = 0.2f;
+    public float maxCameraDistanceFromCenter = 1000;
 
     [Header("Zoom")]
     public float zoomSpeed = 1;
@@ -39,6 +41,8 @@ public class CameraController : MonoBehaviour
         UpdateRotation();
         UpdateZoom();
         UpdatePosition();
+        SecureCameraDistance();
+        SecureFocusHeight();
     }
 
     void UpdateMovementSpeed()
@@ -69,11 +73,15 @@ public class CameraController : MonoBehaviour
 
         //Move camera's focus point
         focusPoint += movementDirection * Time.deltaTime * movementSpeed;
+        focusPoint = Vector3.Lerp(focusPoint, new Vector3(focusPoint.x, wantedFocusPointHeight, focusPoint.z), 0.05f);
+
+        //Limit camera's movement field
+        float distanceFromCenter = Vector3.Distance(new Vector3(focusPoint.x, 0, focusPoint.z), Vector3.zero);
+        if (distanceFromCenter > maxCameraDistanceFromCenter) focusPoint += (-new Vector3(focusPoint.x, 0, focusPoint.z).normalized * (distanceFromCenter - maxCameraDistanceFromCenter));
 
         //Move camera to look at the focus point
         transform.position = focusPoint - (transform.forward * currentDistance);
 
-        SecureCameraDistance();
     }
 
     void UpdateZoom()
@@ -112,6 +120,15 @@ public class CameraController : MonoBehaviour
 
         //Apply rotation
         transform.rotation = Quaternion.Euler(rotation);
+    }
+
+    void SecureFocusHeight()
+    {
+        if (Physics.Raycast(focusPoint + Vector3.up * 200, -Vector3.up, out RaycastHit hit))
+        {
+            if(hit.collider.gameObject.tag == "Terrain")
+            wantedFocusPointHeight = hit.point.y;
+        }
     }
 
     void SecureCameraDistance()
