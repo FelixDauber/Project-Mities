@@ -127,7 +127,7 @@ public class CameraController : MonoBehaviour
         if (Physics.Raycast(focusPoint + Vector3.up * 200, -Vector3.up, out RaycastHit hit))
         {
             if(hit.collider.gameObject.tag == "Terrain")
-            wantedFocusPointHeight = hit.point.y;
+            wantedFocusPointHeight = hit.point.y + 1.5f;
         }
     }
 
