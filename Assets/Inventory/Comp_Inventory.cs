@@ -4,27 +4,81 @@ using UnityEngine;
 
 public class Comp_Inventory : MonoBehaviour, IInventory
 {
-    public StructItem[] Items => items.ToArray();
+    public IItem[] Items => items.ToArray();
 
-    List<StructItem> items;
+    List<IItem> items = new List<IItem>();
 
-    public bool AddItem(StructItem item)
+    public int MaxStorage { get => maxStorage; set => maxStorage = value; }
+
+    [SerializeField]
+    int maxStorage = -1;
+
+    public bool AddItem(IItem item)
     {
-        throw new System.NotImplementedException();
+        IItem foundItem = FindItem(item);
+        if (foundItem.Amount == 0)
+        {
+            items.Add(item);
+        }
+        return true;
     }
 
-    public bool RemoveItem(StructItem item)
+    public bool RemoveItem(IItem item)
     {
-        throw new System.NotImplementedException();
+        IItem foundItem = FindItem(item);
+        if (foundItem.Amount < item.Amount) return false;
+
+        foreach (var examinedItem in items)
+        {
+            if (examinedItem.SameAs(item))
+            {
+                if (examinedItem.Amount < item.Amount) return false;
+
+                examinedItem.Amount -= item.Amount;
+
+                if(examinedItem.Amount == 0)
+                    items.Remove(examinedItem);
+
+                return true;
+            }
+        }
+        return false;
     }
 
-    public StructItem FindItem(StructItem item)
+    public IItem FindItem(IItem item)
     {
-        throw new System.NotImplementedException();
+        foreach (var examinedItem in items)
+        {
+            if (examinedItem.SameAs(item))
+            {
+                return examinedItem;
+            }
+        }
+        item.Amount = 0;
+        return item;
     }
 
-    public bool Contains(StructItem item)
+    public bool Contains(IItem item)
     {
-        throw new System.NotImplementedException();
+        IItem foundItem = FindItem(item);
+        if (foundItem.Amount < item.Amount) return false;
+        return true;
+    }
+
+    public int GetRemainingSpace()
+    {
+        int totalAmount = 0;
+        foreach (var item in items)
+        {
+            totalAmount += item.Amount;
+        }
+        if (maxStorage == -1) return int.MaxValue - totalAmount;
+
+        return maxStorage - totalAmount;
+    }
+
+    public void Clear()
+    {
+        items = new List<IItem>();
     }
 }

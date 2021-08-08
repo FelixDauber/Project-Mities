@@ -17,7 +17,7 @@ public class Building : MonoBehaviour
     [Header("Production")]
     public BuildingType type; //Determines recipes of the building
     [SerializeField]
-    public Inventory inventory;
+    public IInventory inventory;
     public Recipe currentlyProducing;
     public float currentProduction;
     public float productionEfficiency;
@@ -29,6 +29,7 @@ public class Building : MonoBehaviour
     private void Awake()
     {
         productionEfficiency = type.RecipeEfficency;
+        inventory = GetComponent<IInventory>();
     }
 
     private void Update()
@@ -76,32 +77,32 @@ public class Building : MonoBehaviour
         {
             currentlyProducing = bestRecipe;
 
-            foreach (Item item in bestRecipe.required)
+            foreach (IItem item in bestRecipe.required)
                 inventory.RemoveItem(item);
         }
     }
 
     int GetRecipeValue(Recipe recipe)
     {
-        int value = inventory.maxSize / type.recipes.Length;
+        int value = inventory.MaxStorage / type.recipes.Length;
 
-        if(recipe.produced.amount > inventory.GetRemainingSpace())
+        if(recipe.produced.Amount > inventory.GetRemainingSpace())
         {
             return 0;
         }
 
-        Item inventoryItem = inventory.FindItem(recipe.produced);
+        IItem inventoryItem = inventory.FindItem(recipe.produced);
 
         if (inventoryItem != null)
         {
-            value -= inventoryItem.amount;
+            value -= inventoryItem.Amount;
         }
 
         if (value == 0) return 0;
 
-        foreach(Item item in recipe.required)
+        foreach(IItem item in recipe.required)
         {
-            if (!inventory.ContainsItem(item))
+            if (!inventory.Contains(item))
             {
                 return 0;
             }
@@ -111,11 +112,11 @@ public class Building : MonoBehaviour
 
     bool CheckIfRecipeViable(Recipe recipe)
     {
-        if (!inventory.ContainsItem(recipe.produced))
+        if (!inventory.Contains(recipe.produced))
         {
-            foreach (Item item in recipe.required)
+            foreach (IItem item in recipe.required)
             {
-                if (!inventory.ContainsItem(item))
+                if (!inventory.Contains(item))
                 {
                     return false;
                 }

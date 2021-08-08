@@ -4,28 +4,38 @@ using UnityEngine;
 
 public class GlobalInventoryTracker : MonoBehaviour
 {
-    public List<Inventory> inventories = new List<Inventory>();
-    public Inventory inventory = new Inventory(-1);
+    public List<IInventory> inventories = new List<IInventory>();
+    IInventory inventory;
+
+    private void Awake()
+    {
+        inventory = GetComponent<Comp_Inventory>();
+        if(inventory == null)
+        {
+            inventory = gameObject.AddComponent<Comp_Inventory>();
+            inventory.MaxStorage = -1;
+        }
+    }
 
     [ContextMenu("Get Present Inventories")]
     public void GetPresentInventories()
     {
         inventories.Clear();
-        foreach (var building in FindObjectsOfType<Building>())
+        foreach (var inventory in FindObjectsOfType<Comp_Inventory>())
         {
-            inventories.Add(building.inventory);
+            inventories.Add(inventory);
         }
     }
 
     [ContextMenu("Calculate Inventory")]
     public void CalculateInventory()
     {
-        inventory = new Inventory(-1);
-        foreach(Inventory inventory in inventories)
+        inventory.Clear();
+        foreach(IInventory inventory in inventories)
         {
-            foreach (var item in inventory.items)
+            foreach (var item in inventory.Items)
             {
-                this.inventory.AddItem(new Item(item));
+                this.inventory.AddItem(item);
             }
         }
     }

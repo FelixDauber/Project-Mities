@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/*
 public class ResourceRequester : MonoBehaviour
 {
     public List<Inventory> inventories;
@@ -69,3 +69,4 @@ public class TradeTicket
     Inventory giver, receiver;
     Item item;
 }
+*/

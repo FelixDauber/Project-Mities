@@ -2,14 +2,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public struct StructItem
+[System.Serializable]
+public struct StructItem : IItem
 {
-    public ItemData itemData;
-    public override bool Equals(object obj)
-    {
-        if (!(obj is StructItem) || ((StructItem)obj).itemData != itemData)
-            return false;
+    [SerializeField]
+    ItemData itemData;
+    public ItemData ItemData => itemData;
 
-        return Equals((StructItem)obj);
+    [SerializeField]
+    int amount;
+    public int Amount { get => amount; set => amount = value; }
+
+    public StructItem(ItemData itemData, int amount)
+    {
+        this.itemData = itemData;
+        this.amount = amount;
+    }
+
+    public bool SameAs(IItem other)
+    {
+        if ((other.GetType() != GetType()) || other.ItemData != ItemData)
+        {
+            return false;
+        }
+        return true;
     }
 }

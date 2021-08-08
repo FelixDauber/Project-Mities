@@ -6,6 +6,6 @@ using UnityEngine;
 public class Recipe : ScriptableObject
 {
     public float effortRequired;
-    public Item[] required;
-    public Item produced;
+    public StructItem[] required;
+    public StructItem produced;
 }

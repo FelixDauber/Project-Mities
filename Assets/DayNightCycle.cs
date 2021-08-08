@@ -40,12 +40,12 @@ public class DayNightCycle : MonoBehaviour
 
         CalculateDayState();
         sun.rotation = new Quaternion(sun.rotation.x, dayMinutes / TimeMaxValue, sun.rotation.z, sun.rotation.w);
-        Debug.Log((360 * dayMinutes / TimeMaxValue) - 180);
+        //Debug.Log((360 * dayMinutes / TimeMaxValue) - 180);
     }
 
     void CalculateDayState()
     {
-        Debug.Log((GetMinutesFromHour(nightStarts)) + " " + (GetMinutesFromHour(nightStarts + transitionTime)) + " " + dayMinutes);
+        //Debug.Log((GetMinutesFromHour(nightStarts)) + " " + (GetMinutesFromHour(nightStarts + transitionTime)) + " " + dayMinutes);
         DayState = Mathf.InverseLerp(GetMinutesFromHour(nightStarts), GetMinutesFromHour(nightStarts + transitionTime), dayMinutes);
     }
 
