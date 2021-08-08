@@ -9,6 +9,11 @@ public class Inventory
     public List<Item> items = new List<Item>();
     public int maxSize = 100;
 
+    public Inventory(int maxSize)
+    {
+        this.maxSize = maxSize;
+    }
+
     public bool AddItem(Item item)
     {
         Item foundItem = FindItem(item);
@@ -71,6 +76,7 @@ public class Inventory
 
     public int GetRemainingSpace()
     {
+        if (maxSize < 0) return int.MaxValue;
         return maxSize - GetTotal();
     }
 }

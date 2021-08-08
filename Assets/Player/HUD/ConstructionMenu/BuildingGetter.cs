@@ -4,7 +4,11 @@ using UnityEngine;
 
 public class BuildingGetter : MonoBehaviour
 {
-    public int TMPAmountOfBuildings;
+    [SerializeField]
+    int TMPAmountOfBuildings;
+    [SerializeField]
+    bool debugInhabit = false;
+
     public GameObject UIPrefab;
     private List<GameObject> currentlyActive = new List<GameObject>();
     private BuildingPlacing buildingPlacing;
@@ -39,7 +43,19 @@ public class BuildingGetter : MonoBehaviour
             currentlyActive.Add(Instantiate(UIPrefab, transform));
         }
         */
+        if(debugInhabit)
+            SpawnDebugInstances();
     }
+
+    void SpawnDebugInstances()
+    {
+        for (int i = 0; i < TMPAmountOfBuildings; i++)
+        {
+            GameObject newButton = Instantiate(UIPrefab, transform);
+            currentlyActive.Add(newButton);
+        }
+    }
+
     void SpawnBuilding(GameObject building)
     {
         buildingPlacing.SpawnBuilding(building);
