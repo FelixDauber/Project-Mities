@@ -16,6 +16,7 @@ public class Inventory
 
     public bool AddItem(Item item)
     {
+        if (item.amount > GetRemainingSpace()) return false;
         Item foundItem = FindItem(item);
         if(foundItem == null)
         {

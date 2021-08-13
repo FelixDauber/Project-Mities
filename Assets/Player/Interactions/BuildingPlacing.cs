@@ -9,6 +9,7 @@ public class BuildingPlacing : MonoBehaviour
     private RaycastHit HitInfo => playerInteractor.HitInfo;
 
     public Building currentBuilding;
+    private IMessageHandler buildingEventHandler;
 
     //Testing
     public GameObject TMPBuildingPrefab;
@@ -16,6 +17,7 @@ public class BuildingPlacing : MonoBehaviour
     private void Awake()
     {
         playerInteractor = GetComponent<PlayerInteractor>();
+        buildingEventHandler = FindObjectOfType<BuildingEventHandler>();
     }
 
     void Update()
@@ -79,6 +81,7 @@ public class BuildingPlacing : MonoBehaviour
     {
         if (HitInfo.collider == null || EventSystem.current.IsPointerOverGameObject()) return;
         currentBuilding.SetPhysical(true);
+        buildingEventHandler.Send(new BuildingEventHandler.EventBuildingConstructed(currentBuilding));
         currentBuilding = null;
         PlayerVariables.current.playerState = Playerstate.none;
         enabled = false;
