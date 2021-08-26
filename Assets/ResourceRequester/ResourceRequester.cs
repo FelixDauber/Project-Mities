@@ -1,37 +1,35 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-/*
-public class ResourceRequester : MonoBehaviour
-{
-    public List<Inventory> inventories;
 
-    private void Awake()
+
+public class ResourceRequester : MonoBehaviour, IResourceRequester
+{
+    public List<IInventory> inventories = new List<IInventory>();
+
+    void Awake()
     {
-        foreach (var building in FindObjectsOfType<Building>())
-        {
-            inventories.Add(building.inventory);
-        }
+        GetComponent<BuildingEventHandler>().SubscribeTo<BuildingEventHandler.EventBuildingConstructed>(AddInventory);
     }
 
-    public TradeTicket RequestTradeTicket(Inventory buyer, Item item, bool selling)
+    public void AddInventory(BuildingEventHandler.EventBuildingConstructed newBuilding)
     {
-        if (!selling)
+        inventories.Add(newBuilding.building.GetComponent<IInventory>());
+    }
+
+    public IResourceTicket CreateTradeTicket(IItem item, Transform requesterTransform, IInventory requesterInventory, bool buying = true)
+    {
+        if (buying)
         {
-            Inventory bestSeller = GetHighestSeller(item, out Item highestItem);
-            if (bestSeller == null) return null;
+            IInventory bestSeller = GetHighestSeller(item, out IItem highestItem);
+            if (bestSeller == null) return new TradeTicket(null, null, null, null);
 
-            Item newItem = new Item(item);
-            if (item.amount > highestItem.amount)
+            if (item.Amount > highestItem.Amount)
             {
-                newItem.amount = item.amount;
-            }
-            else
-            {
-                newItem.amount = highestItem.amount;
+                item.Amount = highestItem.Amount;
             }
 
-            return new TradeTicket(bestSeller, buyer, newItem);
+            return new TradeTicket(requesterTransform, requesterInventory, bestSeller, item);
         }
         else
         {
@@ -39,18 +37,18 @@ public class ResourceRequester : MonoBehaviour
         }
     }
 
-    Inventory GetHighestSeller(Item item, out Item returnedItem)
+    IInventory GetHighestSeller(IItem item, out IItem returnedItem)
     {
-        Inventory bestInventory = null;
+        IInventory bestInventory = null;
         returnedItem = null;
         int amountOfResources = 0;
         foreach (var inventory in inventories)
         {
-            Item foundItem = inventory.FindItem(item);
-            if (foundItem != null && foundItem.amount > amountOfResources)
+            IItem foundItem = inventory.FindItem(item);
+            if (foundItem != null && foundItem.Amount > amountOfResources)
             {
                 bestInventory = inventory;
-                amountOfResources = foundItem.amount;
+                amountOfResources = foundItem.Amount;
                 returnedItem = foundItem;
             }
         }
@@ -58,15 +56,33 @@ public class ResourceRequester : MonoBehaviour
     }
 }
 
-public class TradeTicket
+public struct TradeTicket : IResourceTicket
 {
-    public TradeTicket(Inventory giver, Inventory receiver, Item item)
+    public Transform buyerTransform;
+    public IInventory seller, buyer;
+
+    //Item
+    public IItem item; public IItem Item => throw new System.NotImplementedException();
+
+    //From
+    public Transform FromTransform => throw new System.NotImplementedException();
+    public IInventory FromInventory => throw new System.NotImplementedException();
+
+    //To
+    public Transform ToTransform => buyerTransform;
+    public IInventory ToInventory => throw new System.NotImplementedException();
+
+    public TradeTicket(Transform buyerTransform, IInventory buyer, IInventory seller, IItem item)
     {
-        this.giver = giver;
-        this.receiver = receiver;
+        this.buyerTransform = buyerTransform;
+        this.buyer = buyer;
+        this.seller = seller;
         this.item = item;
     }
-    Inventory giver, receiver;
-    Item item;
+
+    public bool IsValid()
+    {
+        if (buyerTransform == null || buyer == null || seller == null || item == null) return false;
+        return true;
+    }
 }
-*/

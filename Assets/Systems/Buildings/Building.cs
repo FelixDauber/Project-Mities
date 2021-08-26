@@ -145,6 +145,33 @@ public class Building : MonoBehaviour
         }
     }
 
+    public List<GameObject> GetStructuralPartsByLowestPoint()
+    {
+        List<GameObject> structuralParts = this.structuralParts;
+        List<GameObject> sortedStructuralParts = new List<GameObject>();
+        for (int i = 0; i < this.structuralParts.Count; i++)
+        {
+            float position = float.MaxValue;
+            GameObject lowestGameobject = null;
+            foreach (var structuralPart in structuralParts)
+            {
+                Mesh mesh = structuralPart.GetComponent<MeshFilter>().mesh;
+                if (mesh == null) break;
+                foreach (var vertice in mesh.vertices)
+                {
+                    if(lowestGameobject == null || vertice.y < position)
+                    {
+                        lowestGameobject = structuralPart;
+                        position = vertice.y;
+                    }
+                }
+            }
+            sortedStructuralParts.Add(lowestGameobject);
+            structuralParts.Remove(lowestGameobject);
+        }
+        return sortedStructuralParts;
+    }
+
     private void OnDestroy()
     {
         WhenDestroyed.Invoke();
